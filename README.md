@@ -19,4 +19,6 @@ Uma API REST desenvolvida em Java com Spring Boot para gerenciamento de eventos 
 ## 📦 Executando o projeto
 
 ### Utilizando H2:
-Adiocionar VM option antes de rodar aplicação: -Dspring.profiles.active=h2
+Adiocionar VM option antes de rodar aplicação:
+```vm options
+-Dspring.profiles.active=h2
