@@ -1,10 +1,12 @@
-package service.calendar_api.entity;
+package service.calendar_api.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import service.calendar_api.entity.Owner;
 import service.calendar_api.enums.Label;
 import service.calendar_api.enums.Status;
 
@@ -14,31 +16,25 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_EVENT")
-public class Event {
+public class EventDTO {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "EVENT_ID")
 	private Long id;
 
+	@NotBlank(message = "Event title can not be null or blank")
 	private String title;
 
 	private String description;
 
-	@Column(name = "START_DATE_TIME")
+	@NotNull(message = "Start date time can not be null")
 	private LocalDateTime startDateTime;
 
-	@Column(name = "END_DATE_TIME")
+	@NotNull(message = "End date time can not be null")
 	private LocalDateTime endDateTime;
 
-	@Enumerated(EnumType.STRING)
 	private Label label;
 
-	@Enumerated(EnumType.STRING)
 	private Status status;
 
-	@ManyToOne
-	@JoinColumn(name = "OWNER_ID", nullable = false)
-	private Owner owner;
+	@NotNull(message = "Owner ID can not be null")
+	private Long ownerId;
 }

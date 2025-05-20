@@ -29,11 +29,9 @@ public class OwnerService {
 
 	public OwnerDTO update(Long id, OwnerDTO request) {
 		var owner = findById(id);
+		OwnerMapper.INSTANCE.updateOwnerFromDTO(request, owner);
 
-		owner.setName(request.getName());
-		owner.setEmail(request.getEmail());
 		owner = repository.save(owner);
-
 		return OwnerMapper.INSTANCE.toOwnerDTO(owner);
 	}
 

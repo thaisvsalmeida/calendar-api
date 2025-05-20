@@ -5,8 +5,10 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import service.calendar_api.exception.InvalidEnumArgumentException;
 import service.calendar_api.exception.ResourceNotFoundException;
 
 import java.time.LocalDateTime;
@@ -37,6 +39,28 @@ public class GlobalExceptionHandler {
 				HttpStatus.BAD_REQUEST.value(),
 				"Method Argument Not Valid",
 				errors,
+				request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	private ResponseEntity<StandardError> missingServletRequestParameterException(MissingServletRequestParameterException e, HttpServletRequest request) {
+		var error = new StandardError(
+				LocalDateTime.now().toString(),
+				HttpStatus.BAD_REQUEST.value(),
+				"Missing Servlet Request Parameter",
+				e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+
+	@ExceptionHandler(InvalidEnumArgumentException.class)
+	public ResponseEntity<StandardError> invalidEnumArgumentException(InvalidEnumArgumentException e, HttpServletRequest request) {
+		var error = new StandardError(
+				LocalDateTime.now().toString(),
+				HttpStatus.BAD_REQUEST.value(),
+				"Invalid Enum Argument",
+				e.getMessage(),
 				request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
