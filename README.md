@@ -11,4 +11,14 @@ Uma API REST desenvolvida em Java com Spring Boot para gerenciamento de eventos 
 - Spring Data JPA
 - Hibernate
 - PostgreSQL
+- H2
 - Maven
+
+---
+
+## 📦 Executando o projeto
+
+### Utilizando H2:
+Adiocionar VM option antes de rodar aplicação:
+```vm options
+-Dspring.profiles.active=h2
