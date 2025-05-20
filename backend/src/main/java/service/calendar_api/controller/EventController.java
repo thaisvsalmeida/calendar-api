@@ -11,7 +11,6 @@ import service.calendar_api.service.EventService;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -50,8 +49,8 @@ public class EventController {
 		return ResponseEntity.accepted().body(event);
 	}
 
-	@PutMapping("/{id}/done")
-	public ResponseEntity<EventDTO> doneEvent(@PathVariable(value = "id") Long id) {
+	@PutMapping("/{id}/complete")
+	public ResponseEntity<EventDTO> completeEvent(@PathVariable(value = "id") Long id) {
 		var event = service.updateStatusEvent(id, Status.DONE);
 		return ResponseEntity.accepted().body(event);
 	}
