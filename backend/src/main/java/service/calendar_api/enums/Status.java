@@ -5,20 +5,19 @@ import service.calendar_api.exception.InvalidEnumArgumentException;
 
 import java.util.Arrays;
 
-public enum Label {
-	STUDY,
-	WORK,
-	REST,
-	OTHER;
+public enum Status {
+	TO_DO,
+	DONE,
+	CANCELLED;
 
 	@JsonCreator
-	public static Label fromString(String value) {
+	public static Status fromString(String value) {
 		try {
-			return Label.valueOf(value.toUpperCase());
+			return Status.valueOf(value.toUpperCase());
 		} catch (Exception ex) {
 			throw new InvalidEnumArgumentException(
-					String.format("Invalid Label: %s. Choose between: %s",
-							value, Arrays.toString(Label.values())));
+					String.format("Invalid Status: %s. Choose between: %s",
+							value, Arrays.toString(Status.values())));
 		}
 	}
 }
