@@ -24,11 +24,6 @@ public interface EventMapper {
 	Event toEvent(EventDTO dto, OwnerDTO owner);
 
 	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "title", source = "title")
-	@Mapping(target = "description", source = "description")
-	@Mapping(target = "startDateTime", source = "startDateTime")
-	@Mapping(target = "endDateTime", source = "endDateTime")
-	@Mapping(target = "label", source = "label")
 	@Mapping(target = "status", ignore = true)
 	void updateEventFromDTO(EventDTO dto, @MappingTarget Event entity);
 }

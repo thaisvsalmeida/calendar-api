@@ -16,7 +16,5 @@ public interface OwnerMapper {
 	Owner toOwner(OwnerDTO dto);
 
 	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "name", source = "name")
-	@Mapping(target = "email", source = "email")
 	void updateOwnerFromDTO(OwnerDTO dto, @MappingTarget Owner entity);
 }
