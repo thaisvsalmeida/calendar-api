@@ -97,6 +97,19 @@ class EventServiceTest {
 		Assertions.assertEquals(status, eventArgumentCaptor.getValue().getStatus());
 	}
 
+	@ParameterizedTest
+	@EnumSource(value = Status.class, names = {"DONE", "CANCELLED"})
+	void updateStatusEventShouldNotSaveWhenPreviousStatusIsNotToDo(Status status) {
+		var event = BaseMocks.getEventMock();
+		event.setStatus(status);
+		when(repository.findById(anyLong())).thenReturn(Optional.of(event));
+
+		var response = service.updateStatusEvent(1L, status);
+
+		verify(repository, never()).save(any());
+		Assertions.assertNotNull(response);
+	}
+
 	@Test
 	void deleteEventShouldDeleteAndReturnNothing() {
 		service.deleteById(1L);
