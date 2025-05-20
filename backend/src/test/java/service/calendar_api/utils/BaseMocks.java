@@ -7,9 +7,13 @@ import service.calendar_api.entity.Owner;
 import service.calendar_api.enums.Label;
 import service.calendar_api.enums.Status;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class BaseMocks {
+	public static final LocalDateTime now = LocalDateTime.now();
+	public static final Date dateNow = Date.from(Instant.now());
 
 	public static OwnerDTO getOwnerDTOMock() {
 		var dto = new OwnerDTO();
@@ -19,16 +23,16 @@ public class BaseMocks {
 	}
 
 	public static Owner getOwnerMock() {
-		return new Owner(1L, "Charlie", "charlie@gmail.com");
+		return new Owner(1L, "Charlie", "charlie@gmail.com", dateNow, dateNow);
 	}
 
 	public static EventDTO getEventDTOMock() {
-		return new EventDTO(1L, "Meeting", "Work meeting", LocalDateTime.now(),
-				LocalDateTime.now().plusHours(1), Label.WORK, Status.TO_DO, 1L);
+		return new EventDTO(1L, "Meeting", "Work meeting", now,
+				now.plusHours(1), Label.WORK, Status.TO_DO, 1L);
 	}
 
 	public static Event getEventMock() {
-		return new Event(1L, "Meeting", "Work meeting", LocalDateTime.now(),
-				LocalDateTime.now().plusHours(1), Label.WORK, Status.TO_DO, getOwnerMock());
+		return new Event(1L, "Meeting", "Work meeting", now,
+				now.plusHours(1), Label.WORK, Status.TO_DO, getOwnerMock(), dateNow, dateNow);
 	}
 }
