@@ -10,6 +10,7 @@ import service.calendar_api.mapper.EventMapper;
 import service.calendar_api.repository.EventRepository;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -17,12 +18,20 @@ import java.util.List;
 public class EventService {
 	private final EventRepository repository;
 	private final OwnerService ownerService;
+	private final RecurringEventService recurringEventService;
 
 	public List<EventDTO> findAllEventsByDateAndOwner(Long ownerId,
 													  LocalDateTime startDateTime,
 													  LocalDateTime endDateTime) {
 		List<Event> events = repository.findAllByOwnerIdAndStartDateTimeGreaterThanEqualAndEndDateTimeLessThanEqual(ownerId, startDateTime, endDateTime);
-		return EventMapper.INSTANCE.toEventDTOList(events);
+
+		events.addAll(recurringEventService
+				.getEventsFromRecurringEvents(ownerId, startDateTime.toLocalDate(), endDateTime.toLocalDate()));
+
+		return EventMapper.INSTANCE.toEventDTOList(events)
+				.stream()
+				.sorted(Comparator.comparing(EventDTO::getStartDateTime))
+				.toList();
 	}
 
 	private Event findById(Long id) {

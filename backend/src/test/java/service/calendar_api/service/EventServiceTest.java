@@ -17,6 +17,7 @@ import service.calendar_api.repository.EventRepository;
 import service.calendar_api.utils.BaseMocks;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -32,6 +33,8 @@ class EventServiceTest {
 	private EventRepository repository;
 	@Mock
 	private OwnerService ownerService;
+	@Mock
+	private RecurringEventService recurringEventService;
 	@Captor
 	private ArgumentCaptor<Event> eventArgumentCaptor;
 
@@ -39,6 +42,8 @@ class EventServiceTest {
 	void findAllEventsByDateAndOwnerShouldReturnEventDtoList() {
 		when(repository.findAllByOwnerIdAndStartDateTimeGreaterThanEqualAndEndDateTimeLessThanEqual(anyLong(), any(), any()))
 				.thenReturn(Collections.singletonList(BaseMocks.getEventMock()));
+		when(recurringEventService.getEventsFromRecurringEvents(anyLong(), any(), any()))
+				.thenReturn(new ArrayList<>());
 
 		var response = service.findAllEventsByDateAndOwner(1L, LocalDateTime.now(), LocalDateTime.now().plusHours(1));
 

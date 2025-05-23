@@ -4,10 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import service.calendar_api.exception.DuplicatedBlockException;
 import service.calendar_api.exception.InvalidEnumArgumentException;
 import service.calendar_api.exception.ResourceNotFoundException;
 
@@ -63,5 +65,27 @@ public class GlobalExceptionHandler {
 				e.getMessage(),
 				request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<StandardError> httpMessageNotReadableException(HttpMessageNotReadableException e, HttpServletRequest request) {
+		var error = new StandardError(
+				LocalDateTime.now().toString(),
+				HttpStatus.BAD_REQUEST.value(),
+				"Http Message Not Readable",
+				e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+
+	@ExceptionHandler(DuplicatedBlockException.class)
+	public ResponseEntity<StandardError> duplicatedBlockException(DuplicatedBlockException e, HttpServletRequest request) {
+		var error = new StandardError(
+				LocalDateTime.now().toString(),
+				HttpStatus.CONFLICT.value(),
+				"Duplicated Block Recurring Event",
+				e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
 	}
 }
