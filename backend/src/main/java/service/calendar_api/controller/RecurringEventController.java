@@ -25,7 +25,7 @@ public class RecurringEventController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<RecurringEventDTO> findEventById(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<RecurringEventDTO> findRecurringEventById(@PathVariable(value = "id") Long id) {
 		return ResponseEntity.ok(service.getRecurringEventById(id));
 	}
 
@@ -47,7 +47,7 @@ public class RecurringEventController {
 	}
 
 	@PutMapping("/{id}/cancel")
-	public ResponseEntity<RecurringEventDTO> cancelEvent(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<RecurringEventDTO> cancelRecurringEvent(@PathVariable(value = "id") Long id) {
 		var event = service.cancelRecurringEvent(id);
 		return ResponseEntity.accepted().body(event);
 	}
