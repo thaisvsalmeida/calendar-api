@@ -22,3 +22,10 @@ Uma API REST desenvolvida em Java com Spring Boot para gerenciamento de eventos 
 Adiocionar VM option antes de rodar aplicação:
 ```vm options
 -Dspring.profiles.active=h2
+```
+
+---
+
+## Report:
+
+[![codecov](https://codecov.io/gh/thaisvsalmeida/calendar-api/branch/main/graph/badge.svg)](https://codecov.io/gh/thaisvsalmeida/calendar-api)
