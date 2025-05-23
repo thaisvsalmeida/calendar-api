@@ -38,8 +38,8 @@ public class RecurringEventDTO {
 
 	private LocalDate endDate; // can be null for infinite recurrence
 
-	@NotEmpty(message = "Days of week can not be empty")
-	private Set<@NotNull DayOfWeek> daysOfWeek;
+	@NotEmpty(message = "Days of week can not be null or empty")
+	private Set<@NotNull(message = "Day of week can not be null") DayOfWeek> daysOfWeek;
 
 	private Label label;
 
