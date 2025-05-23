@@ -56,4 +56,14 @@ public class Event {
 	@UpdateTimestamp
 	@Column(name = "UPDATE_AT", nullable = false)
 	private Date updateAt;
+
+	public Event(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime, Label label, Status status, Owner owner) {
+		this.title = title;
+		this.description = description;
+		this.startDateTime = startDateTime;
+		this.endDateTime = endDateTime;
+		this.label = label;
+		this.status = status;
+		this.owner = owner;
+	}
 }
