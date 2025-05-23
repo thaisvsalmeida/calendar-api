@@ -1,31 +1,35 @@
 # 📅 Calendar API
 
-Uma API REST desenvolvida em Java com Spring Boot para gerenciamento de eventos únicos e recorrentes em um calendário. Permite cadastrar compromissos, definir recorrência, associar etiquetas e usuários.
+[![Build](https://github.com/thaisvsalmeida/calendar-api/actions/workflows/maven.yml/badge.svg)](https://github.com/thaisvsalmeida/calendar-api/actions/workflows/maven.yml)
+[![codecov](https://codecov.io/gh/thaisvsalmeida/calendar-api/branch/main/graph/badge.svg)](https://codecov.io/gh/thaisvsalmeida/calendar-api)
+
+A RESTful API built with Java and Spring Boot for managing both single and recurring calendar events. It allows you to create appointments, set recurrence rules, and associate labels and owners with each event.
 
 ---
 
-## 🚀 Tecnologias
+## 🚀 Technologies
 
 - Java 21
 - Spring Boot 3.4.5
 - Spring Data JPA
 - Hibernate
 - PostgreSQL
-- H2
+- H2 (in-memory)
 - Maven
 
 ---
 
-## 📦 Executando o projeto
+## 📦 Running the Project
 
-### Utilizando H2:
-Adiocionar VM option antes de rodar aplicação:
-```vm options
+### Using H2 (In-Memory Database)
+Before running the application, set the following VM option:
+```bash
 -Dspring.profiles.active=h2
 ```
+This activates the h2 profile, using an in-memory database ideal for development and testing.
 
 ---
 
-## Report:
+## 📊 Code Coverage
 
-[![codecov](https://codecov.io/gh/thaisvsalmeida/calendar-api/branch/main/graph/badge.svg)](https://codecov.io/gh/thaisvsalmeida/calendar-api)
+This project uses [JaCoCo](https://www.jacoco.org/) and [Codecov](https://codecov.io/) to track code coverage and quality.
