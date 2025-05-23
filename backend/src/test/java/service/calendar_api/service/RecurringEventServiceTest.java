@@ -10,10 +10,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import service.calendar_api.entity.RecurringEvent;
 import service.calendar_api.enums.Status;
+import service.calendar_api.exception.DuplicatedBlockException;
 import service.calendar_api.exception.ResourceNotFoundException;
+import service.calendar_api.repository.BlockedRecurringEventRepository;
 import service.calendar_api.repository.RecurringEventRepository;
 import service.calendar_api.utils.BaseMocks;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -29,6 +34,8 @@ class RecurringEventServiceTest {
 	private RecurringEventRepository repository;
 	@Mock
 	private OwnerService ownerService;
+	@Mock
+	private BlockedRecurringEventRepository blockedRecurringEventRepository;
 	@Captor
 	private ArgumentCaptor<RecurringEvent> eventArgumentCaptor;
 
@@ -110,5 +117,65 @@ class RecurringEventServiceTest {
 		service.deleteRecurringEventById(1L);
 
 		verify(repository, times(1)).deleteById(anyLong());
+	}
+
+	@Test
+	void addBlocksToRecurringEventsShouldSaveBlock() {
+		when(repository.findById(anyLong())).thenReturn(Optional.of(BaseMocks.getRecurringEventMock()));
+		when(blockedRecurringEventRepository.existsByRecurringEventAndDate(any(), any())).thenReturn(false);
+
+		service.addBlocksToRecurringEvents(1L, LocalDate.now());
+
+		verify(blockedRecurringEventRepository, times(1)).save(any());
+	}
+
+	@Test
+	void addBlocksToRecurringEventsShouldThrowsDuplicatedBlockExceptionWhenAlreadyExists() {
+		when(repository.findById(anyLong())).thenReturn(Optional.of(BaseMocks.getRecurringEventMock()));
+		when(blockedRecurringEventRepository.existsByRecurringEventAndDate(any(), any())).thenReturn(true);
+
+		var ex = Assertions.assertThrows(DuplicatedBlockException.class,
+				() -> service.addBlocksToRecurringEvents(1L, LocalDate.now()));
+
+		verify(blockedRecurringEventRepository, never()).save(any());
+		Assertions.assertEquals("Block already exists for this date", ex.getMessage());
+	}
+
+	@Test
+	void getEventsFromRecurringEventsShouldReturnEventListWhenEventOccursDuringDay() {
+		var recurringEvent = BaseMocks.getRecurringEventMock();
+		recurringEvent.setStartTime(LocalTime.of(8, 0));
+		recurringEvent.setEndTime(LocalTime.of(12, 0));
+
+		when(repository.findAllByOwnerIdAndStartDateBetween(anyLong(), any(), any()))
+				.thenReturn(Collections.singletonList(recurringEvent));
+		when(blockedRecurringEventRepository.findAllByRecurringEventAndDateBetween(any(), any(), any()))
+				.thenReturn(Collections.singletonList(BaseMocks.getBlockedRecurringEventMock()));
+
+		var response = service.getEventsFromRecurringEvents(1L, LocalDate.now(), LocalDate.now().plusDays(7));
+
+		Assertions.assertNotNull(response);
+		Assertions.assertEquals(7, response.size());
+		Assertions.assertEquals(Collections.emptyList(),
+				response.stream().filter(r -> r.getStartDateTime().equals(LocalDateTime.now())).toList());
+	}
+
+	@Test
+	void getEventsFromRecurringEventsShouldReturnEventListWhenEventCrossesMidnight() {
+		var recurringEvent = BaseMocks.getRecurringEventMock();
+		recurringEvent.setStartTime(LocalTime.of(23, 0));
+		recurringEvent.setEndTime(LocalTime.of(7, 0));
+
+		when(repository.findAllByOwnerIdAndStartDateBetween(anyLong(), any(), any()))
+				.thenReturn(Collections.singletonList(recurringEvent));
+		when(blockedRecurringEventRepository.findAllByRecurringEventAndDateBetween(any(), any(), any()))
+				.thenReturn(Collections.singletonList(BaseMocks.getBlockedRecurringEventMock()));
+
+		var response = service.getEventsFromRecurringEvents(1L, LocalDate.now(), LocalDate.now().plusDays(7));
+
+		Assertions.assertNotNull(response);
+		Assertions.assertEquals(7, response.size());
+		Assertions.assertEquals(Collections.emptyList(),
+				response.stream().filter(r -> r.getStartDateTime().equals(LocalDateTime.now())).toList());
 	}
 }

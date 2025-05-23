@@ -1,8 +1,10 @@
 package service.calendar_api.utils;
 
+import service.calendar_api.dto.BlockedRecurringEventDTO;
 import service.calendar_api.dto.EventDTO;
 import service.calendar_api.dto.OwnerDTO;
 import service.calendar_api.dto.RecurringEventDTO;
+import service.calendar_api.entity.BlockedRecurringEvent;
 import service.calendar_api.entity.Event;
 import service.calendar_api.entity.Owner;
 import service.calendar_api.entity.RecurringEvent;
@@ -54,7 +56,15 @@ public class BaseMocks {
 				Label.WORK, Status.TO_DO, getOwnerMock(), dateNow, dateNow);
 	}
 
-	public static Set<DayOfWeek> getDaysOfWeek() {
+	private static Set<DayOfWeek> getDaysOfWeek() {
 		return new HashSet<>(List.of(DayOfWeek.values()));
+	}
+
+	public static BlockedRecurringEventDTO getBlockedRecurringEventDTOMock() {
+		return new BlockedRecurringEventDTO(localDateNow);
+	}
+
+	public static BlockedRecurringEvent getBlockedRecurringEventMock() {
+		return new BlockedRecurringEvent(1L, localDateNow, getRecurringEventMock(), dateNow, dateNow);
 	}
 }

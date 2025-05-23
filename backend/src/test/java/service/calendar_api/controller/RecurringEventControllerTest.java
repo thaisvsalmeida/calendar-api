@@ -98,4 +98,17 @@ class RecurringEventControllerTest {
 
 		verify(service, times(1)).deleteRecurringEventById(anyLong());
 	}
+
+	@Test
+	void addBlocksToRecurringEventsShouldSaveAndReturnNoContent() throws Exception {
+		String jsonBody = objectMapper.writeValueAsString(BaseMocks.getBlockedRecurringEventDTOMock());
+
+		mockMvc.perform(post("/recurring-event/{id}/block", 1L)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(jsonBody)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNoContent());
+
+		verify(service, times(1)).addBlocksToRecurringEvents(anyLong(), any());
+	}
 }

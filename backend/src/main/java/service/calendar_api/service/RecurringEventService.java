@@ -83,9 +83,7 @@ public class RecurringEventService {
 		blockedRecurringEventRepository.save(new BlockedRecurringEvent(date, recurringEvent));
 	}
 
-	public List<Event> getEventsFromRecurringEvents(Long ownerId,
-													LocalDate start,
-													LocalDate end) {
+	public List<Event> getEventsFromRecurringEvents(Long ownerId, LocalDate start, LocalDate end) {
 		List<Event> events = new ArrayList<>();
 
 		List<RecurringEvent> recurringEvents = repository
@@ -100,7 +98,7 @@ public class RecurringEventService {
 		return events;
 	}
 
-	public List<Event> generateEvents(RecurringEvent recurringEvent, LocalDate startDate,
+	private List<Event> generateEvents(RecurringEvent recurringEvent, LocalDate startDate,
 									  LocalDate endDate, List<BlockedRecurringEvent> blocks) {
 		List<Event> events = new ArrayList<>();
 
